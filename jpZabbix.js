@@ -160,4 +160,8 @@ jpZabbix = function(options) {
 	this.getConfig = function() {
 		return config;
 	};
+	
+	this.getToken = function() {
+		return authid;
+	};
 };
