@@ -43,7 +43,7 @@ jpZabbix = function(options) {
 			params: params
 		};
 
-		return Promise.resolve(JSON.stringify(data));
+		return JSON.stringify(data);
 	}
 
 	this.api = function(method, params) {
