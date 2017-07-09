@@ -113,7 +113,7 @@ jpZabbix = function(options) {
 		apiversion = null;
 		errormsg = null;
 
-		return server.getApiVersion().then(server.login).then(server.setAuth)
+		return server.getApiVersion().then(server.login)
 	}
 
 	this.setOptions = function(addoptions) {
