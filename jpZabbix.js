@@ -14,13 +14,14 @@ jpZabbix = function(options) {
 	var authid = null;
 	var apiversion = null;
 	var errormsg = null;
+	var server = this;
 
 
 	function createPostData(method, params) {
 
 		// check method option
 		if (method === null || typeof method === 'undefined') {
-			return false;
+			return Promise.reject(false);
 		}
 
 		// check params option
@@ -42,7 +43,7 @@ jpZabbix = function(options) {
 			params: params
 		};
 
-		return JSON.stringify(data);
+		return Promise.resolve(JSON.stringify(data));
 	}
 
 	this.api = function(method, params) {
@@ -90,20 +91,20 @@ jpZabbix = function(options) {
 
 	this.setAuth = function(token) {
 		
-		if (config.basicAuth) {return false}
+		if (config.basicAuth) {return Promise.reject(false)}
 		
 		delete config.user;
 		delete config.password;
 		
 		authid = token;
 		
-		return true;
+		return Promise.resolve(true);
 	};
 
 	function clearAuth() {
 		authid = null;
 		
-		return true;
+		return Promise.resolve(true);
 	};
 
 	this.init = function() {
@@ -112,14 +113,14 @@ jpZabbix = function(options) {
 		apiversion = null;
 		errormsg = null;
 
-		return this.getApiVersion().then(this.login());
+		return server.getApiVersion().then(server.login).then(server.setAuth)
 	}
 
 	this.setOptions = function(addoptions) {
 
 		Object.assign(config, addoptions);
 		
-		return true;
+		return Promise.resolve(true);
 		
 	}
 
@@ -127,13 +128,13 @@ jpZabbix = function(options) {
 		
 		apiversion = version;
 		
-		return true;
+		return Promise.resolve(true);
 	};
 
 	this.logout = function() {
 		if (!authid) {return false};
 		
-		return this.api(method, []).then(clearAuth)
+		return server.api(method, []).then(clearAuth)
 	};
 	
 	this.login = function() {
@@ -148,16 +149,24 @@ jpZabbix = function(options) {
 			break;
 		};
 		
-		return this.api(method, {user:config.user, password:config.password}).then(this.setAuth)
+		return server.api(method, {user:config.user, password:config.password}).then(server.setAuth)
 	};
 
 	this.getApiVersion = function() {
 
-		return this.api('apiinfo.version',[]).then(setApiVersion)
+		return server.api('apiinfo.version',[]).then(setApiVersion)
 		
 	}
 	
 	this.getConfig = function() {
-		return config;
+		return Promise.resolve(config);
 	};
+	
+	this.getToken = function() {
+		if (authid) {
+			return Promise.resolve(authid);
+		} else {
+			return Promise.reject(false);
+		};
+	}
 };
