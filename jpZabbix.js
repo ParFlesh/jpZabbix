@@ -75,7 +75,7 @@ jpZabbix = function(options) {
 
 			// Handle network errors
 			req.onerror = function() {
-			  reject({'code':req.status, 'data':req.responseText, 'message':req.statusText});
+			  reject({'code':0, 'data':JSON.stringify(req), 'message':'request error'});
 			};
 
 			// Make the request
