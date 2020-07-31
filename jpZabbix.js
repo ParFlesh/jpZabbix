@@ -78,7 +78,7 @@ jpZabbix = function(options) {
 
 			// Handle network errors
 			req.onerror = function() {
-			  reject({'code':0, 'data':JSON.stringify(postData), 'message':string.concat('request error for url ', config.url)});
+			  reject({'code':0, 'data':JSON.stringify(postData), 'message':'request error for url ' +config.url});
 			};
 			
 			if (postData) {
