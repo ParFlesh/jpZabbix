@@ -73,13 +73,13 @@ jpZabbix = function(options) {
 				}
 			};
 
-			// Handle network errors
-			req.onerror = function() {
-			  reject({'code':0, 'data':JSON.stringify(req), 'message':'request error'});
-			};
-
 			// Make the request
 			var postData = createPostData(method, params)
+
+			// Handle network errors
+			req.onerror = function() {
+			  reject({'code':0, 'data':JSON.stringify(postData), 'message':string.concat('request error for url ', config.url)});
+			};
 			
 			if (postData) {
 				req.send(postData)
