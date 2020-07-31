@@ -38,13 +38,12 @@ jpZabbix = function(options) {
 		var data = {
 			jsonrpc: '2.0',
 			id: ++rpcid,
-			auth: authid,
 			method: method,
 			params: params
 		};
 		
 		if (method != "apiinfo.version") {
-			data["auth"] = authid'
+			data["auth"] = authid
 		}
 
 		return JSON.stringify(data);
